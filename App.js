@@ -7,65 +7,28 @@
  *
  */
 
-import { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import Person from "./components/Person";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeScreen from "./screens/HomeScreen";
+import { PaperProvider } from "react-native-paper";
 
 export default function App() {
-  const url = "https://random-data-api.com/api/v2/users?size=10";
-  // const insets = useSafeAreaInsets();
-
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const getUsers = async () => {
-    setLoading(true);
-    setError("");
-    fetch(url)
-      .then((response) => response.json())
-      .then((users) => {
-        setLoading(false);
-        setUsers(users);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError(err.message || "Fetch error");
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  useEffect(() => {
-    // console.log(users);
-  }, [users]);
-
-  const renderUser = ({ item }) => {
-    return <Person user={item} />;
-  };
+  const Stack = createNativeStackNavigator();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={users}
-        keyExtractor={(user) => user.uid}
-        renderItem={renderUser}
-        ItemSeparatorComponent={<View style={styles.listSeparator} />}
-      />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ title: "Users" }}
+            ></Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  listSeparator: {
-    marginBottom: 4,
-  },
-});
