@@ -12,32 +12,39 @@ import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import Person from "../components/Person";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import FloatingActionButton from "../components/FloatingActionButton";
+import Toast from "react-native-toast-message";
 
 const HomeScreen = () => {
-  const url = "https://random-data-api.com/api/v2/users?size=10";
+  const url = "https://random-data-api.com/api/v2/users";
   const [users, setUsers] = useState([]);
-  const [error, setError] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
 
-  const getUsers = async () => {
-    setError("");
+  // retrieve 10 users and update state
+  const fetchUsers = async () => {
     setRefreshing(true);
-    fetch(url)
+    fetch(`${url}?size=10`)
       .then((response) => response.json())
-      .then((users) => {
-        setUsers(users);
+      .then((userList) => {
+        setUsers(userList);
         setRefreshing(false);
       })
       .catch((err) => {
         setRefreshing(false);
-        setError(err.message || "Fetch error");
+        showToastMessage({ text1: "Fetch error" });
         console.log(err);
       });
   };
 
+  // When fetch fails, display a toast message.
+  const showToastMessage = async (props) => {
+    const { type = "error", text1 = "Fetch fail" } = props;
+    Toast.show({ type, text1 });
+  };
+
+  // initial fetch
   useEffect(() => {
-    getUsers();
+    fetchUsers();
   }, []);
 
   const renderUser = ({ item }) => {
@@ -45,7 +52,20 @@ const HomeScreen = () => {
   };
 
   const handleRefresh = () => {
-    getUsers();
+    fetchUsers();
+  };
+
+  // fetch one user. Triggered by the FAB button.
+  const fetchOneUser = async () => {
+    fetch(`${url}?size=1`)
+      .then((response) => response.json())
+      .then((user) => {
+        const newUsers = [user, ...users];
+        setUsers(newUsers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -57,6 +77,7 @@ const HomeScreen = () => {
           paddingLeft: insets.left,
           paddingRight: insets.right,
         },
+        { flex: 1 },
       ]}
     >
       <FlatList
@@ -68,7 +89,7 @@ const HomeScreen = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       />
-      <FloatingActionButton />
+      <FloatingActionButton fetchOneUser={fetchOneUser} />
     </View>
   );
 };

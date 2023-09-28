@@ -1,15 +1,25 @@
-// source: https://callstack.github.io/react-native-paper/docs/components/FAB/
+/**
+ *
+ * Serdar Ulutas
+ * 2023-Sept-27
+ * https://callstack.github.io/react-native-paper/docs/components/FAB/
+
+ */
 
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
 
-const FloatingActionButton = () => {
+const FloatingActionButton = ({ fetchOneUser }) => {
   return (
     <FAB
       icon="plus"
       style={styles.fab}
-      onPress={() => console.log("Pressed")}
+      onPress={() => {
+        if (typeof fetchOneUser == "function") {
+          fetchOneUser();
+        }
+      }}
     />
   );
 };
@@ -17,9 +27,10 @@ const FloatingActionButton = () => {
 const styles = StyleSheet.create({
   fab: {
     position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
+    // margin: 16,
+    right: 16,
+    bottom: 32,
+    backgroundColor: "#76b3ab",
   },
 });
 

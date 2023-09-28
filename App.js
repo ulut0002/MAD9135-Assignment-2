@@ -12,6 +12,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./screens/HomeScreen";
 import { PaperProvider } from "react-native-paper";
+import Toast from "react-native-toast-message";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -29,6 +30,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
+      <Toast />
     </SafeAreaProvider>
   );
 }

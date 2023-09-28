@@ -40,30 +40,10 @@ const AndroidPerson = ({ user }) => {
 };
 
 const Person = ({ user }) => {
-  const { first_name = "", last_name = "", avatar = "", uid } = user;
-
   return Platform.OS === "ios" ? (
     <IOS_Person user={user} />
   ) : (
     <AndroidPerson user={user} />
-  );
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.avatar_container}>
-        <UserAvatar
-          size={50}
-          name={(first_name + " " + last_name).trim()}
-          src={avatar}
-          style={styles.avatar}
-        />
-      </View>
-
-      <View style={styles.name_container}>
-        <Text style={styles.name_text}>{first_name}</Text>
-        <Text style={styles.name_text}>{last_name}</Text>
-      </View>
-    </View>
   );
 };
 
@@ -97,13 +77,10 @@ const styles = StyleSheet.create({
     gap: 3,
     flex: 1,
   },
-  name_text: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
+
   border: {
-    borderWidth: 1,
-    borderRadius: 1,
+    // borderWidth: 1,
+    // borderRadius: 1,
   },
 });
 
