@@ -1,8 +1,9 @@
 import React from "react";
 import { View, StyleSheet, Text, Platform } from "react-native";
 import UserAvatar from "react-native-user-avatar";
+import defaultImage from "../assets/user.png";
 
-const avatar_size = 50;
+const avatar_size = 60;
 
 const IOS_Person = ({ user }) => {
   const { first_name = "", last_name = "", avatar = "", uid } = user;
@@ -12,7 +13,8 @@ const IOS_Person = ({ user }) => {
       <UserAvatar
         size={avatar_size}
         name={(first_name + " " + last_name).trim()}
-        src={avatar}
+        src={avatar || defaultImage}
+        style={styles.avatar}
       />
       <View style={[styles.border, styles.name_container]}>
         <Text style={[styles.name, styles.first_name]}>{first_name}</Text>
@@ -34,6 +36,7 @@ const AndroidPerson = ({ user }) => {
         size={avatar_size}
         name={(first_name + " " + last_name).trim()}
         src={avatar}
+        style={styles.avatar}
       />
     </View>
   );
@@ -69,7 +72,8 @@ const styles = StyleSheet.create({
   },
   avatar_container: {},
   avatar: {
-    backgroundColor: "transparent",
+    // backgroundColor: "transparent",
+    // color: "black",
   },
   name_container: {
     flexDirection: "column",
